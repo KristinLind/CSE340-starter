@@ -408,3 +408,17 @@ header h1 {
     padding-top: 2.5rem;
   }
 }
+
+@media (max-width: 768px) {
+
+  body,
+  main,
+  .grid,
+  .hero,
+  .card,
+  .section,
+  .container {
+    background-image: none !important;
+    background: var(--white) !important;
+  }
+}

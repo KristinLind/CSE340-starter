@@ -419,6 +419,6 @@ header h1 {
   .section,
   .container {
     background-image: none !important;
-    background: var(--white) !important;
+    background: var(--black) !important;
   }
 }

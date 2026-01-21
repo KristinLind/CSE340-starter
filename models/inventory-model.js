@@ -27,6 +27,10 @@ async function getInventoryByClassificationId(classification_id) {
     throw error
   }
 }
+
+/* ***************************
+ *  Get one inventory item by inv_id
+ * ************************** */
 async function getInventoryById(inv_id) {
   try {
     const sql = `
@@ -36,7 +40,8 @@ async function getInventoryById(inv_id) {
         ON i.classification_id = c.classification_id
       WHERE i.inv_id = $1
     `
-    return await pool.query(sql, [inv_id])
+    const data = await pool.query(sql, [inv_id])
+    return data.rows[0] // single vehicle object
   } catch (error) {
     throw error
   }

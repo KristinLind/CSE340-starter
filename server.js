@@ -10,6 +10,7 @@ const staticRoute = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const utilities = require("./utilities")
 const invRoute = require("./routes/inventoryRoute")
+const errorRoute = require("./routes/errorRoute")
 
 /* ***********************
  * View Engine and Templates
@@ -23,7 +24,7 @@ app.set("layout", "./layouts/layout")
  *************************/
 app.use(express.static("public"))
 
-// Build nav for every view (must be before routes that render views)
+// Build nav for every view
 app.use(async (req, res, next) => {
   try {
     res.locals.nav = await utilities.getNav()
@@ -38,33 +39,30 @@ app.use(async (req, res, next) => {
  *************************/
 app.use(staticRoute)
 
-// Index route (wrapped with handleErrors)
 app.get("/", utilities.handleErrors(baseController.buildHome))
 
-// Inventory routes
 app.use("/inv", invRoute)
 
+// Task 3 intentional error route
+app.use(errorRoute)
+
 /* **********************
- * File not found route - must be last route in the list
+ * File not found route - must be last route
  *************************/
-app.use(async (req, res, next) => {
+app.use((req, res, next) => {
   next({ status: 404, message: "Sorry, we appear to have lost that page." })
 })
 
 /* ************************
  * Express Error Handler
- * Place after all other middleware
  ***************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
 
-  let message
-  if (err.status == 404) {
-    message = err.message
-  } else {
-    message = "Oh no! There was a crash. Maybe try a different route?"
-  }
+  let message = err.status == 404
+    ? err.message
+    : "Oh no! There was a crash. Maybe try a different route?"
 
   res.status(err.status || 500).render("errors/error", {
     title: err.status || "Server Error",
@@ -77,7 +75,6 @@ app.use(async (err, req, res, next) => {
  * Local Server Information
  *************************/
 const port = process.env.PORT || 3000
-
 app.listen(port, "0.0.0.0", () => {
   console.log(`app listening on port ${port}`)
 })

@@ -1,18 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../partials/head') %>
-<body>
-    <div class="page-shell">
-        <div id="wrapper" class="content-card">
-            <%- include('../partials/header') %>
-            <%- include('../partials/navigation') %>
 
-            <main>
-                <%- body %>
-            </main>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        <%= title %> | CSE 340 App
+    </title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
 
-                <%- include('../partials/footer') %>
-        </div>
+<body class="<%= typeof pageClass !== 'undefined' ? pageClass : '' %>">
+   <div class="page-shell">
+
+        <header id="top-header">
+            <div class="header-inner">
+                <div class="siteName">
+                    <a href="/" title="Home page">CSE Motors</a>
+                </div>
+                <div class="account">
+                    <a href="/account" title="My account">My Account</a>
+                </div>
+            </div>
+        </header>
+
+        <nav class="main-nav" aria-label="Primary navigation">
+            <%- nav %>
+        </nav>
+
+        <main>
+            <%- body %>
+        </main>
+
+        <footer>
+            <div class="copyright">
+                <p>&copy; 2026 CSE 340 App</p>
+            </div>
+        </footer>
+
     </div>
 </body>
 

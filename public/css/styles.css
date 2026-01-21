@@ -348,7 +348,7 @@ header h1 {
 
 .detail-card {
   max-width: 1100px;
-  margin: 1.rem auto;
+  margin: 1rem auto;
   padding: 1rem;
   background: #fff;
   border: 3px solid var(--champagne);
@@ -364,6 +364,9 @@ header h1 {
 }
 
 .vehicle-detail {
+  background: rgba(255,255,255,0.2);
+  padding: 1.25rem;
+  border-radius: 12px;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 2rem;
@@ -420,6 +423,10 @@ header h1 {
   line-height: 1.6;
 }
 
+.vehicle-desc strong {
+  margin-right: 0.5rem;
+}
+
 .vehicle-info p {
   margin: 0.65rem 0;
   line-height: 1.4;
@@ -446,6 +453,14 @@ header h1 {
   }
 }
 
+@media (max-width: 800px) {
+  .vehicle-specs li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
 @media (min-width: 768px) {
   .lower {
     margin-top: 4rem;
@@ -453,12 +468,6 @@ header h1 {
 }
 .upgrades {
   transform: translateY(-40px);
-}
-
-@media (max-width: 768px) {
-  .vehicle-detail {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media screen and (min-width: 768px) {

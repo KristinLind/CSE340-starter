@@ -13,6 +13,7 @@ const staticRoute = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const utilities = require("./utilities")
 const invRoute = require("./routes/inventoryRoute")
+const inventoryRoute = require("./routes/inventoryRoute")
 
 
 /* ***********************
@@ -23,6 +24,7 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout")
 app.use(express.static("public"))
+app.use("/inv", inventoryRoute)
 app.use(async (req, res, next) => {
   try {
     res.locals.nav = await utilities.getNav()

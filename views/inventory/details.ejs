@@ -1,0 +1,56 @@
+<section class="page-title-card">
+    <h1>
+        <%= title %>
+    </h1>
+</section>
+
+<section class="detail-card">
+    <img src="<%= vehicle.inv_image %>" alt="Image of <%= vehicle.inv_make %> <%= vehicle.inv_model %>">
+
+    <h2>
+        <%= vehicle.inv_year %>
+            <%= vehicle.inv_make %>
+                <%= vehicle.inv_model %>
+    </h2>
+    <p><strong>Price:</strong> $<%= new Intl.NumberFormat("en-US").format(vehicle.inv_price) %>
+    </p>
+    <p><strong>Miles:</strong>
+        <%= new Intl.NumberFormat("en-US").format(vehicle.inv_miles) %>
+    </p>
+    <p><strong>Color:</strong>
+        <%= vehicle.inv_color %>
+    </p>
+
+    <p>
+        <%= vehicle.inv_description %>
+    </p>
+</section>
+
+<section class="page-title-card">
+    <h1>
+        <%= title %>
+    </h1>
+</section>
+
+<section class="detail-card">
+    <img src="<%= vehicle.inv_image %>" alt="Image of <%= vehicle.inv_make %> <%= vehicle.inv_model %>">
+
+    <h2>
+        <%= vehicle.inv_year %>
+            <%= vehicle.inv_make %>
+                <%= vehicle.inv_model %>
+    </h2>
+
+    <p><strong>Price:</strong> $<%= new Intl.NumberFormat("en-US").format(vehicle.inv_price) %>
+    </p>
+    <p><strong>Miles:</strong>
+        <%= new Intl.NumberFormat("en-US").format(vehicle.inv_miles) %>
+    </p>
+    <p><strong>Color:</strong>
+        <%= vehicle.inv_color %>
+    </p>
+
+    <p>
+        <%= vehicle.inv_description %>
+    </p>
+</section>

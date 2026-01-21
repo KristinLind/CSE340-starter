@@ -346,6 +346,23 @@ header h1 {
   color: var(--black);
 }
 
+.detail-card {
+  max-width: 1100px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: #fff;
+  border: 3px solid var(--champagne);
+  border-radius: 10px;
+}
+
+.detail-card img {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
 @media (min-width: 768px) {
   .lower {
     margin-top: 4rem;

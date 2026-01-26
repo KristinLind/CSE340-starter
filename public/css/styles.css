@@ -451,6 +451,35 @@ header h1 {
   color: var(--champagne);
 }
 
+/* Flash message banners */
+.flash {
+  margin: 1rem auto;
+  padding: 0.9rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  max-width: 900px;
+  width: calc(100% - 2rem);
+  font-weight: 600;
+}
+
+.flash--success {
+  background: #e9f7ee;
+  border-color: #2a7a44;
+  color: #1f5a33;
+}
+
+.flash--error {
+  background: #fdecec;
+  border-color: #b42318;
+  color: #7a1b14;
+}
+
+.flash--info {
+  background: #eef6ff;
+  border-color: #1d4ed8;
+  color: #1e3a8a;
+}
+
 @media (max-width: 800px) {
   .vehicle-detail {
     grid-template-columns: 1fr;

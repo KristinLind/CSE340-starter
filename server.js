@@ -25,21 +25,28 @@ app.set("layout", "./layouts/layout")
  * Middleware 
  *************************/
 app.use(express.static("public"))
-console.log("SESSION_SECRET present?", Boolean(process.env.SESSION_SECRET))
-console.log("NODE_ENV:", process.env.NODE_ENV)
+
 app.use(session({
   store: new (require("connect-pg-simple")(session))({
     createTableIfMissing: true,
     pool,
   }),
   secret: process.env.SESSION_SECRET,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   name: "sessionId",
 }))
 
 // Express Messages Middleware
 app.use(require("connect-flash")())
+app.use((req, res, next) => {
+  res.locals.flash = {
+    success: req.flash("success"),
+    error: req.flash("error"),
+    info: req.flash("info"),
+  }
+  next()
+})
 app.use(function (req, res, next) {
   res.locals.messages = require("express-messages")(req, res)
   next()
@@ -66,6 +73,21 @@ app.use("/inv", invRoute)
 
 // Task 3 intentional error route
 app.use(errorRoute)
+
+app.get("/test-success", (req, res) => {
+  req.flash("success", "Success banner is working!")
+  res.redirect("/")
+})
+
+app.get("/test-error", (req, res) => {
+  req.flash("error", "Error banner is working!")
+  res.redirect("/")
+})
+
+app.get("/test-info", (req, res) => {
+  req.flash("info", "Info banner is working!")
+  res.redirect("/")
+})
 
 /* **********************
  * File not found route - must be last route

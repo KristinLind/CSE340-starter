@@ -442,6 +442,15 @@ header h1 {
   font-size: 1.15rem;
 }
 
+.site-footer a {
+  color: var(--blue-green);
+  text-decoration: underline;
+}
+
+.site-footer a:hover {
+  color: var(--champagne);
+}
+
 @media (max-width: 800px) {
   .vehicle-detail {
     grid-template-columns: 1fr;

@@ -25,6 +25,8 @@ app.set("layout", "./layouts/layout")
  * Middleware 
  *************************/
 app.use(express.static("public"))
+console.log("SESSION_SECRET present?", Boolean(process.env.SESSION_SECRET))
+console.log("NODE_ENV:", process.env.NODE_ENV)
 app.use(session({
   store: new (require("connect-pg-simple")(session))({
     createTableIfMissing: true,

@@ -13,6 +13,7 @@ const invRoute = require("./routes/inventoryRoute")
 const errorRoute = require("./routes/errorRoute")
 const session = require("express-session")
 const pool = require("./database/")
+const accountRoute = require("./routes/accountRoute")
 
 /* ***********************
  * View Engine and Templates
@@ -62,13 +63,16 @@ app.use(async (req, res, next) => {
   }
 })
 
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json()) // 
+
 /* ***********************
  * Routes
  *************************/
 app.use(staticRoute)
+app.use("/account", accountRoute)
 
 app.get("/", utilities.handleErrors(baseController.buildHome))
-
 app.use("/inv", invRoute)
 
 // Task 3 intentional error route
@@ -88,6 +92,7 @@ app.get("/test-info", (req, res) => {
   req.flash("info", "Info banner is working!")
   res.redirect("/")
 })
+
 
 /* **********************
  * File not found route - must be last route

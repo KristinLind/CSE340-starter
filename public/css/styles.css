@@ -451,14 +451,12 @@ header h1 {
   color: var(--champagne);
 }
 
-/* Flash message banners */
 .flash {
-  margin: 1rem auto;
-  padding: 0.9rem 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid transparent;
   max-width: 900px;
-  width: calc(100% - 2rem);
+  margin: 1rem auto;
+  padding: 0.9rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
   font-weight: 600;
 }
 
@@ -478,6 +476,164 @@ header h1 {
   background: #eef6ff;
   border-color: #1d4ed8;
   color: #1e3a8a;
+}
+
+.account-form {
+  max-width: 520px;
+  background: #fff;
+  border: 2px solid #111;
+  padding: 2rem;
+  margin: 2rem auto 1rem;
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+}
+
+.form-note {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+.required {
+  color: #b00020;
+  font-weight: 700;
+}
+
+.account-form label {
+  display: block;
+  margin: 1rem 0 0.35rem;
+  font-weight: 600;
+}
+
+.account-form input {
+  width: 100%;
+  padding: 0.85rem 0.9rem;
+  border: 2px solid #111;
+  border-radius: 2px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.account-form button[type="submit"] {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.account-alt {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+.account-form input[type="email"],
+.account-form input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body.register {
+  background: var(--blue-green);
+}
+
+body.register main {
+  display: grid;
+  place-items: start center;
+  padding-top: 2rem;
+}
+
+body.register .account-form {
+  width: min(640px,92vw);
+  background: var(--white);
+  border: 2px solid #111;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
+.password-field {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.password-field input {
+  flex: 1;
+}
+
+.password-rules {
+  margin: 0.75rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.toggle-password {
+  width: 3rem;
+  border: 2px solid #111;
+  background: #f5f5f5;
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 1.1rem;
+}
+
+.password-help {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-left: 4px solid #2d6cdf;
+  background: #f6f9ff;
+}
+
+.password-title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+}
+
+.password-rules {
+  margin: 0 0 0.5rem 1.2rem;
+}
+
+.password-disclaimer {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.primary-btn {
+  margin-top: 1.5rem;
+  background: #2d6cdf;
+  color: #fff;
+  border: none;
+  padding: 0.95rem 2.25rem;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: auto;
+}
+
+.primary-btn:hover {
+  filter: brightness(0.95);
+}
+
+.account-alt {
+  margin-top: 0.75rem;
+}
+
+.notice {
+  max-width: 640px;
+  margin: 1rem auto;
+  padding: 0.75rem 1rem;
+  border: 2px solid #b42318;
+  background: #fdecec;
+  color: #7a1b14;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.notice li {
+  margin: 0.25rem 0;
 }
 
 @media (max-width: 800px) {
@@ -640,5 +796,11 @@ header h1 {
   .container {
     background-image: none !important;
     background: var(--black) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body.register {
+    background: var(--blue-green) !important;
   }
 }

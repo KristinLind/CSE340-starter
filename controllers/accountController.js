@@ -7,9 +7,11 @@ const bcrypt = require("bcryptjs")
  * *************************************** */
 async function buildLogin(req, res) {
   const nav = await utilities.getNav()
-  res.render("account/login", {
+  return res.render("account/login", {
     title: "Login",
     nav,
+    errors: null,
+    pageClass: "login",
   })
 }
 
@@ -22,10 +24,9 @@ async function buildRegister(req, res, next) {
     title: "Register",
     nav,
     pageClass: "register",
-    errors: null, // important for EJS error block
+    errors: null, 
   })
 }
-
 
 /* ****************************************
  *  Process Registration

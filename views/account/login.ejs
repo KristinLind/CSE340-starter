@@ -1,16 +1,11 @@
-<h1>
-    <%= title %>
-</h1>
-<p class="form-note"><span class="required">*</span> All fields are required.</p>
+<div class="form-header">
+    <h1>
+        <%= title %>
+    </h1>
 
-<div class="password-help">
-    <p class="password-title">Password Requirements</p>
-    <ul class="password-rules">
-        <li>12 characters minimum</li>
-        <li>At least 1 capital letter</li>
-        <li>At least 1 number</li>
-        <li>At least 1 special character</li>
-    </ul>
+    <p class="form-note">
+        <span class="required">*</span> All fields are required.
+    </p>
 </div>
 
 <form class="account-form" method="post" action="/account/login">
@@ -24,6 +19,18 @@
             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
             title="Must be at least 12 characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character.">
         <button type="button" class="toggle-password" aria-label="Show password" aria-pressed="false">👁️</button>
+    </div>
+    <div class="password-help">
+        <p class="password-title">Password Requirements</p>
+        <ul class="password-rules">
+            <li>12 characters minimum</li>
+            <li>At least 1 capital letter</li>
+            <li>At least 1 number</li>
+            <li>At least 1 special character</li>
+        </ul>
+        <p class="password-disclaimer">
+        (These rules will be enforced in a later activity.)
+        </p>
     </div>
 
     <button type="submit">Login</button>

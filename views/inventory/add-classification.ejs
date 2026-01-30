@@ -1,0 +1,33 @@
+<section class="inv-form-card">
+    <h1>
+        <%= title %>
+    </h1>
+
+    <%- messages() %>
+
+        <% if (errors && errors.length) { %>
+            <ul class="notice">
+                <% errors.forEach(e=> { %>
+                    <li>
+                        <%= e.msg %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } %>
+
+                <form action="/inv/add-classification" method="post">
+                    <div class="inv-form-grid inv-form-grid-one">
+                        <div class="form-field">
+                            <label for="classification_name">Classification Name</label>
+                            <input type="text" id="classification_name" name="classification_name" required
+                                pattern="^[A-Za-z0-9]+$"
+                                title="No spaces or special characters. Letters and numbers only."
+                                value="<%= classification_name || '' %>" />
+                        </div>
+                    </div>
+
+                    <div class="inv-form-actions">
+                        <button type="submit">Add Classification</button>
+                    </div>
+                </form>
+</section>

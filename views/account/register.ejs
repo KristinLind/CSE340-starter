@@ -15,19 +15,6 @@
 
 <p class="form-note"><span class="required">*</span></span> All fields are required.</p>
 
-<div class="password-help">
-    <p class="password-title">Password Requirements</p>
-    <ul class="password-rules">
-        <li>12 characters minimum</li>
-        <li>At least 1 capital letter</li>
-        <li>At least 1 number</li>
-        <li>At least 1 special character</li>
-    </ul>
-    <p class="password-disclaimer">
-        (These rules will be enforced in a later activity.)
-    </p>
-</div>
-
 <form class="account-form" action="/account/register" method="post">
     <label for="account_firstname">
         First name <span class="required">*</span>
@@ -58,7 +45,21 @@
         </button>
     </div>
 
+<div class="password-help password-help-inline">
+    <p class="password-title">Password Requirements</p>
+    <ul class="password-rules">
+        <li>12 characters minimum</li>
+        <li>At least 1 capital letter</li>
+        <li>At least 1 number</li>
+        <li>At least 1 special character</li>
+    </ul>
+    <p class="password-disclaimer">
+        (These rules will be enforced in a later activity.)
+    </p>
+</div>
+
     <button type="submit" class="primary-btn">Register</button>
+
 </form>
 
 <p class="account-alt">

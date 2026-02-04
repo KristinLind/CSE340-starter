@@ -1,8 +1,6 @@
 const { body, validationResult } = require("express-validator")
-const utilities = require(".")
+const utilities = require("../utilities")
 const validate = {}
-const invValidate = require("../utilities/inventory-validation")
-
 
 /* ***************************
  * Classification rules
@@ -31,27 +29,39 @@ validate.checkClassificationData = async (req, res, next) => {
       title: "Add Classification",
       nav,
       errors: errors.array(),
-      classification_name, // optional stickiness
+      classification_name,
     })
   }
   next()
 }
 
+/* ***************************
+ * Inventory rules (used for add AND update)
+ * *************************** */
 validate.inventoryRules = () => {
   return [
-    body("classification_id").notEmpty().withMessage("Please choose a classification."),
+    body("classification_id")
+      .notEmpty().withMessage("Please choose a classification.")
+      .isInt().withMessage("Classification must be a valid ID."),
     body("inv_make").trim().escape().notEmpty().withMessage("Make is required."),
     body("inv_model").trim().escape().notEmpty().withMessage("Model is required."),
-    body("inv_year").trim().isLength({ min: 4, max: 4 }).isNumeric().withMessage("Year must be 4 digits."),
+    body("inv_year")
+      .trim()
+      .isLength({ min: 4, max: 4 })
+      .isNumeric()
+      .withMessage("Year must be a valid 4-digit year."),
     body("inv_description").trim().escape().notEmpty().withMessage("Description is required."),
     body("inv_image").trim().notEmpty().withMessage("Image path is required."),
     body("inv_thumbnail").trim().notEmpty().withMessage("Thumbnail path is required."),
-    body("inv_price").trim().isNumeric().withMessage("Price must be a number."),
+    body("inv_price").trim().isNumeric().withMessage("Price must be a valid number with no symbols or commas."),
     body("inv_miles").trim().isInt().withMessage("Miles must be digits only."),
     body("inv_color").trim().escape().notEmpty().withMessage("Color is required."),
   ]
 }
 
+/* ***************************
+ * Check ADD inventory data
+ * *************************** */
 validate.checkInventoryData = async (req, res, next) => {
   const errors = validationResult(req)
   const {
@@ -90,4 +100,27 @@ validate.checkInventoryData = async (req, res, next) => {
   next()
 }
 
+/* ***************************
+ * Check UPDATE inventory data
+ * *************************** */
+validate.checkUpdateData = async (req, res, next) => {
+  const { classification_id, inv_make, inv_model } = req.body
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    const nav = await utilities.getNav()
+    const classificationSelect = await utilities.buildClassificationList(classification_id)
+
+    return res.render("inventory/edit-inventory", {
+      title: `Edit ${inv_make} ${inv_model}`,
+      nav,
+      classificationSelect,
+      errors: errors.array(),
+      ...req.body,
+    })
+  }
+  next()
+}
+
 module.exports = validate
+

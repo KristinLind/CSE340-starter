@@ -1,7 +1,21 @@
 <section class="management-card">
-    <h1>
-        <%= title %>
-    </h1>
+<h1>
+    <%= title %>
+</h1>
+
+<p>
+    <a href="/inv/add-classification">Add Classification</a> |
+    <a href="/inv/add-inventory">Add Inventory</a>
+</p>
+
+<h2>Manage Inventory</h2>
+<p>Select a classification to see the inventory items in that classification.</p>
+
+<%- classificationSelect %>
+
+    <table id="inventoryDisplay"></table>
+
+    <noscript>JavaScript must be enabled to use this page.</noscript>
 
     <div class="management-row">
         <p class="management-lead">Choose an option:</p>
@@ -12,3 +26,5 @@
         </div>
     </div>
 </section>
+
+<script src="/js/inventory.js"></script>

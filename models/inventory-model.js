@@ -105,12 +105,98 @@ async function addInventory(invData) {
   }
 }
 
+/* ***************************
+ *  Update inventory item
+ * ************************** */
+async function updateInventory(invData) {
+  try {
+    const sql = `
+      UPDATE public.inventory
+      SET
+        inv_make = $1,
+        inv_model = $2,
+        inv_year = $3,
+        inv_description = $4,
+        inv_image = $5,
+        inv_thumbnail = $6,
+        inv_price = $7,
+        inv_miles = $8,
+        inv_color = $9,
+        classification_id = $10
+      WHERE inv_id = $11
+      RETURNING *
+    `
+
+    const params = [
+      invData.inv_make,
+      invData.inv_model,
+      invData.inv_year,
+      invData.inv_description,
+      invData.inv_image,
+      invData.inv_thumbnail,
+      invData.inv_price,
+      invData.inv_miles,
+      invData.inv_color,
+      invData.classification_id,
+      invData.inv_id,
+    ]
+
+    const data = await pool.query(sql, params)
+    return data.rows[0]
+  } catch (error) {
+    return null
+  }
+}
+
+/* ***************************
+ *  Update inventory item
+ * ************************** */
+async function updateInventory(invData) {
+  try {
+    const sql = `
+      UPDATE public.inventory
+      SET inv_make = $1,
+          inv_model = $2,
+          inv_year = $3,
+          inv_description = $4,
+          inv_image = $5,
+          inv_thumbnail = $6,
+          inv_price = $7,
+          inv_miles = $8,
+          inv_color = $9,
+          classification_id = $10
+      WHERE inv_id = $11
+      RETURNING *
+    `
+
+    const params = [
+      invData.inv_make,
+      invData.inv_model,
+      invData.inv_year,
+      invData.inv_description,
+      invData.inv_image,
+      invData.inv_thumbnail,
+      invData.inv_price,
+      invData.inv_miles,
+      invData.inv_color,
+      invData.classification_id,
+      invData.inv_id,
+    ]
+
+    const data = await pool.query(sql, params)
+    return data.rows[0]
+  } catch (error) {
+    return null
+  }
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getInventoryById,
   addClassification,
   addInventory,
+  updateInventory,
 }
 
 

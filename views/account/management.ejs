@@ -1,0 +1,10 @@
+<h1>
+    <%= title %>
+</h1>
+
+<% if (locals.loggedin) { %>
+    <p>You're logged in.</p>
+    <% } else { %>
+        <p>You are not logged in.</p>
+        <p><a href="/account/login">Login</a></p>
+        <% } %>

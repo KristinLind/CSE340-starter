@@ -14,7 +14,7 @@ const errorRoute = require("./routes/errorRoute")
 const session = require("express-session")
 const pool = require("./database/")
 const accountRoute = require("./routes/accountRoute")
-
+const cookieParser = require("cookie-parser")
 /* ***********************
  * View Engine and Templates
  *************************/
@@ -45,6 +45,7 @@ app.use((req, res, next) => {
     success: req.flash("success"),
     error: req.flash("error"),
     info: req.flash("info"),
+    notice: req.flash("notice")
   }
   next()
 })
@@ -65,6 +66,10 @@ app.use(async (req, res, next) => {
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json()) // 
+
+app.use(cookieParser())
+app.use(utilities.checkJWTToken)
+
 
 /* ***********************
  * Routes
@@ -92,7 +97,6 @@ app.get("/test-info", (req, res) => {
   req.flash("info", "Info banner is working!")
   res.redirect("/")
 })
-
 
 /* **********************
  * File not found route - must be last route

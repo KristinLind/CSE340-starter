@@ -1,0 +1,75 @@
+<section class="inv-form-card">
+    <h1>
+        <%= title %>
+    </h1>
+
+    <%- messages() %>
+
+        <% if (errors && errors.length) { %>
+            <ul class="notice">
+                <% errors.forEach(e=> { %>
+                    <li>
+                        <%= e.msg %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } %>
+
+                <form action="/inv/update" method="post">
+                    <!-- REQUIRED so Step 2 knows what to update -->
+                    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+                    <div class="inv-form-grid">
+
+                        <div class="form-field">
+                            <label>Classification</label>
+                            <!-- THIS is where it goes -->
+                            <%- classificationSelect %>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="inv_make">Make</label>
+                            <input id="inv_make" name="inv_make" required value="<%= inv_make %>">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="inv_model">Model</label>
+                            <input id="inv_model" name="inv_model" required value="<%= inv_model %>">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="inv_year">Year</label>
+                            <input id="inv_year" name="inv_year" required pattern="^[0-9]{4}$" value="<%= inv_year %>">
+                        </div>
+
+                        <div class="form-field form-field-full">
+                            <label for="inv_description">Description</label>
+                            <textarea id="inv_description" name="inv_description"
+                                required><%= inv_description %></textarea>
+                        </div>
+
+                        <input type="hidden" name="inv_image" value="<%= inv_image %>">
+                        <input type="hidden" name="inv_thumbnail" value="<%= inv_thumbnail %>">
+
+                        <div class="form-field">
+                            <label for="inv_price">Price</label>
+                            <input id="inv_price" name="inv_price" required value="<%= inv_price %>">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="inv_miles">Miles</label>
+                            <input id="inv_miles" name="inv_miles" required pattern="^[0-9]+$" value="<%= inv_miles %>">
+                        </div>
+
+                        <div class="form-field">
+                            <label for="inv_color">Color</label>
+                            <input id="inv_color" name="inv_color" required value="<%= inv_color %>">
+                        </div>
+
+                    </div>
+
+                    <div class="inv-form-actions">
+                        <button type="submit">Update Vehicle</button>
+                    </div>
+                </form>
+</section>

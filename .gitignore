@@ -64,3 +64,8 @@ When you installed Git and cloned the remote repository in week 1, you should ha
 3. You should see that page in the browser.
 
 .vscode/
+
+# Assignment archives (do not commit)
+*.zip
+*.tar.gz
+

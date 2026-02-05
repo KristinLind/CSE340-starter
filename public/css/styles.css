@@ -31,7 +31,7 @@ body.home {
 }
 
 body.login {
-  background: var(--blue-green);
+  background: var(--blue-green) !important;
 }
 
 body.login main {
@@ -41,13 +41,23 @@ body.login main {
 }
 
 body.register {
-  background: var(--blue-green);
+  background: var(--blue-green) !important;
 }
 
 a:focus-visible,
 button:focus-visible {
   outline: 3px solid var(--champagne);
   outline-offset: 3px;
+}
+
+.auth-link {
+  color: var(--white);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.auth-link:hover {
+  color: var(--champagne);
 }
 
 #top-header {

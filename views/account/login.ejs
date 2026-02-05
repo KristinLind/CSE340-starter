@@ -2,7 +2,6 @@
     <h1>
         <%= title %>
     </h1>
-
     <p class="form-note">
         <span class="required">*</span> All fields are required.
     </p>
@@ -10,16 +9,14 @@
 
 <form class="account-form" method="post" action="/account/login">
     <label for="account_email">Email (Username)</label>
-    <input type="email" id="account_email" name="account_email" required
-        value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
+    <input type="email" id="account_email" name="account_email" required>
 
     <label for="account_password">Password</label>
     <div class="password-field">
-        <input type="password" id="account_password" name="account_password" required
-            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
-            title="Must be at least 12 characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character.">
-        <button type="button" class="toggle-password" aria-label="Show password" aria-pressed="false">👁️</button>
+        <input type="password" id="account_password" name="account_password" required>
+        <button type="button" class="toggle-password" aria-label="Show password">👁️</button>
     </div>
+
     <div class="password-help">
         <p class="password-title">Password Requirements</p>
         <ul class="password-rules">
@@ -28,19 +25,17 @@
             <li>At least 1 number</li>
             <li>At least 1 special character</li>
         </ul>
-        <p class="password-disclaimer">
-        (These rules will be enforced in a later activity.)
-        </p>
     </div>
 
     <button type="submit">Login</button>
-
 </form>
+
+<p class="auth-footer">
+    No account?
+    <a href="/account/register" class="auth-link">Register here</a>
+</p>
 
 <script src="/js/password-toggle.js"></script>
 
-<p class="account-alt">
-    No account? <a href="/account/register">Register here</a>
-</p>
 
 

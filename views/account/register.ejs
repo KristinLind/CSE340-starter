@@ -1,69 +1,61 @@
-<h1>
-    <%= title %>
-</h1>
+<div class="form-header">
+    <h1>
+        <%= title %>
+    </h1>
 
-<% if (errors) { %>
-    <ul class="notice">
-        <% errors.array().forEach(error=> { %>
-            <li>
-                <%= error.msg %>
-            </li>
-            <% }) %>
-    </ul>
-    <% } %>
+    <% if (errors) { %>
+        <ul class="notice">
+            <% errors.array().forEach(error=> { %>
+                <li>
+                    <%= error.msg %>
+                </li>
+                <% }) %>
+        </ul>
+        <% } %>
 
-
-<p class="form-note"><span class="required">*</span></span> All fields are required.</p>
-
-<form class="account-form" action="/account/register" method="post">
-    <label for="account_firstname">
-        First name <span class="required">*</span>
-    </label>
-    <input type="text" id="account_firstname" name="account_firstname" required>
-
-    <label for="account_lastname">
-        Last name <span class="required">*</span>
-    </label>
-    <input type="text" id="account_lastname" name="account_lastname" required>
-
-    <label for="account_email">
-        Email address <span class="required">*</span>
-    </label>
-    <input type="email" id="account_email" name="account_email" required>
-
-    <label for="account_password">
-        Password <span class="required">*</span>
-    </label>
-
-    <div class="password-field">
-        <input type="password" id="account_password" name="account_password"   required
-            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
-            title="Must be at least 12 characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character."
-            >
-        <button type="button" class="toggle-password" aria-label="Show password" aria-pressed="false">
-            👁️
-        </button>
-    </div>
-
-<div class="password-help password-help-inline">
-    <p class="password-title">Password Requirements</p>
-    <ul class="password-rules">
-        <li>12 characters minimum</li>
-        <li>At least 1 capital letter</li>
-        <li>At least 1 number</li>
-        <li>At least 1 special character</li>
-    </ul>
-    <p class="password-disclaimer">
-        (These rules will be enforced in a later activity.)
-    </p>
+<p class="form-note">
+    <span class="required">*</span> All fields are required.
+</p>
 </div>
 
-    <button type="submit" class="primary-btn">Register</button>
+<form class="account-form" action="/account/register" method="post">
 
+    <label for="account_firstname">First name *</label>
+    <input type="text" id="account_firstname" name="account_firstname" required
+        value="<%= typeof account_firstname !== 'undefined' ? account_firstname : '' %>">
+
+    <label for="account_lastname">Last name *</label>
+    <input type="text" id="account_lastname" name="account_lastname" required
+        value="<%= typeof account_lastname !== 'undefined' ? account_lastname : '' %>">
+
+    <label for="account_email">Email *</label>
+    <input type="email" id="account_email" name="account_email" required
+        value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
+
+    <label for="account_password">Password *</label>
+    <div class="password-field">
+        <input type="password" id="account_password" name="account_password" required
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+            title="Must be at least 12 characters and include 1 uppercase, 1 lowercase, 1 number, and 1 special character.">
+        <button type="button" class="toggle-password" aria-label="Show password">👁️</button>
+    </div>
+
+    <div class="password-help">
+        <p class="password-title">Password Requirements</p>
+        <ul class="password-rules">
+            <li>12 characters minimum</li>
+            <li>At least 1 capital letter</li>
+            <li>At least 1 number</li>
+            <li>At least 1 special character</li>
+        </ul>
+    </div>
+
+    <button type="submit" class="primary-btn">Register</button>
 </form>
 
-<p class="account-alt">
-    Already have an account? <a href="/account/login">Login here</a>
+<p class="auth-footer">
+    Already have an account?
+    <a href="/account/login" class="auth-link">Login here</a>
 </p>
 
 <script src="/js/password-toggle.js"></script>

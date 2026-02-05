@@ -24,17 +24,20 @@
 
                         <div class="form-field">
                             <label for="inv_make">Make</label>
-                            <input id="inv_make" name="inv_make" required value="<%= inv_make %>">
+                            <input type="text" id="inv_make" name="inv_make" required value="<%= inv_make %>"
+                                placeholder="e.g. Ford">
                         </div>
 
                         <div class="form-field">
                             <label for="inv_model">Model</label>
-                            <input id="inv_model" name="inv_model" required value="<%= inv_model %>">
+                            <input type="text" id="inv_model" name="inv_model" required value="<%= inv_model %>"
+                                placeholder="e.g. F-150">
                         </div>
 
                         <div class="form-field">
                             <label for="inv_year">Year</label>
-                            <input id="inv_year" name="inv_year" required pattern="^[0-9]{4}$" value="<%= inv_year %>">
+                            <input type="text" id="inv_year" name="inv_year" required pattern="^[0-9]{4}$"
+                                value="<%= inv_year %>" placeholder="YYYY">
                         </div>
 
                         <div class="form-field form-field-full">
@@ -43,23 +46,36 @@
                                 required><%= inv_description %></textarea>
                         </div>
 
-                        <!-- KEEP these hidden fields exactly as you had them -->
-                        <input type="hidden" name="inv_image" value="<%= inv_image %>">
-                        <input type="hidden" name="inv_thumbnail" value="<%= inv_thumbnail %>">
+                        <!-- CRITERIA 9 FIX: Fields are now visible so paths can be overridden -->
+                        <div class="form-field">
+                            <label for="inv_image">Image Path</label>
+                            <input type="text" id="inv_image" name="inv_image" value="<%= inv_image %>" required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="inv_thumbnail">Thumbnail Path</label>
+                            <input type="text" id="inv_thumbnail" name="inv_thumbnail" value="<%= inv_thumbnail %>"
+                                required>
+                        </div>
 
                         <div class="form-field">
                             <label for="inv_price">Price</label>
-                            <input id="inv_price" name="inv_price" required value="<%= inv_price %>">
+                            <!-- min="0" prevents negative numbers in the browser -->
+                            <input type="number" id="inv_price" name="inv_price" required value="<%= inv_price %>"
+                                min="0" step="0.01">
                         </div>
 
                         <div class="form-field">
                             <label for="inv_miles">Miles</label>
-                            <input id="inv_miles" name="inv_miles" required pattern="^[0-9]+$" value="<%= inv_miles %>">
+                            <!-- min="0" prevents negative numbers in the browser -->
+                            <input type="number" id="inv_miles" name="inv_miles" required value="<%= inv_miles %>"
+                                min="0">
                         </div>
 
                         <div class="form-field">
                             <label for="inv_color">Color</label>
-                            <input id="inv_color" name="inv_color" required value="<%= inv_color %>">
+                            <input type="text" id="inv_color" name="inv_color" required value="<%= inv_color %>"
+                                placeholder="e.g. Blue">
                         </div>
                     </div>
 

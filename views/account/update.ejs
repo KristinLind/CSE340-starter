@@ -1,0 +1,90 @@
+<main class="account-update-page">
+    <h1>
+        <%= title %>
+    </h1>
+
+    <%- messages() %>
+
+        <% if (errors) { %>
+            <ul class="notice">
+                <% errors.array().forEach(error=> { %>
+                    <li>
+                        <%= error.msg %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } %>
+
+                <!-- Update Account Information Form -->
+                <form id="updateForm" class="update-form" action="/account/update" method="post">
+                    <h2>Update Account Information</h2>
+                    <p class="form-note">* All fields are required.</p>
+
+                    <div class="form-group">
+                        <label for="account_firstname">First Name *</label>
+                        <input type="text" id="account_firstname" name="account_firstname"
+                            value="<%= locals.account_firstname || accountData.account_firstname %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="account_lastname">Last Name *</label>
+                        <input type="text" id="account_lastname" name="account_lastname"
+                            value="<%= locals.account_lastname || accountData.account_lastname %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="account_email">Email Address *</label>
+                        <input type="email" id="account_email" name="account_email"
+                            value="<%= locals.account_email || accountData.account_email %>" required>
+                    </div>
+
+                    <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+
+                    <input type="submit" class="btn" value="Update Account">
+                </form>
+
+                <!-- Change Password Form -->
+                <form id="passwordForm" class="update-form" action="/account/update-password" method="post">
+                    <h2>Change Password</h2>
+                    <p class="form-note">Enter a new password below to change your current password. Your password must
+                        meet all requirements listed.</p>
+
+                    <div class="form-group">
+                        <label for="account_password">New Password *</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="account_password" name="account_password" required
+                                pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{12,}$">
+                            <button type="button" class="btn-secondary" id="pswdBtn" onclick="togglePassword()">Show
+                                Password</button>
+                        </div>
+                    </div>
+
+                    <div class="password-requirements">
+                        <h3>Password Requirements</h3>
+                        <ul>
+                            <li>12 characters minimum</li>
+                            <li>At least 1 capital letter</li>
+                            <li>At least 1 number</li>
+                            <li>At least 1 special character</li>
+                        </ul>
+                    </div>
+
+                    <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+
+                    <input type="submit" class="btn" value="Change Password">
+                </form>
+</main>
+
+<script>
+    function togglePassword() {
+        const pswdInput = document.getElementById("account_password");
+        const pswdBtn = document.getElementById("pswdBtn");
+        if (pswdInput.type === "password") {
+            pswdInput.type = "text";
+            pswdBtn.textContent = "Hide Password";
+        } else {
+            pswdInput.type = "password";
+            pswdBtn.textContent = "Show Password";
+        }
+    }
+</script>

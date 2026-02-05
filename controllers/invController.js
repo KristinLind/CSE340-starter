@@ -6,7 +6,6 @@ const invController = {}
 
 invController.buildByClassificationId = async function (req, res, next) {
   const classificationId = req.params.classificationId
-
   const nav = await utilities.getNav()
   const data = await invModel.getInventoryByClassificationId(classificationId)
   const grid = await utilities.buildClassificationGrid(data.rows)
@@ -21,7 +20,6 @@ invController.buildByClassificationId = async function (req, res, next) {
 
 invController.buildByInventoryId = async function (req, res, next) {
   const invId = req.params.invId
-
   const nav = await utilities.getNav()
   const vehicle = await invModel.getInventoryById(invId)
 
@@ -84,50 +82,35 @@ invController.buildAddInventory = async (req, res) => {
 }
 
 /* ***************************
- *  Build edit inventory view
+ * Add Classification Process
  * ************************** */
-invController.buildEditInventory = async (req, res, next) => {
-  const invId = parseInt(req.params.invId)
-  const nav = await utilities.getNav()
-
-  const itemData = await invModel.getInventoryById(invId)
-  if (!itemData) return next({ status: 404, message: "Inventory item not found." })
-
-  const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
-  const itemName = `${itemData.inv_make} ${itemData.inv_model}`
-
-  res.render("inventory/edit-inventory", {
-    title: `Edit ${itemName}`,
-    nav,
-    classificationSelect,
-    errors: null,
-
-    inv_id: itemData.inv_id,
-    inv_make: itemData.inv_make,
-    inv_model: itemData.inv_model,
-    inv_year: itemData.inv_year,
-    inv_description: itemData.inv_description,
-    inv_image: itemData.inv_image,
-    inv_thumbnail: itemData.inv_thumbnail,
-    inv_price: itemData.inv_price,
-    inv_miles: itemData.inv_miles,
-    inv_color: itemData.inv_color,
-    classification_id: itemData.classification_id,
-  })
-}
-
 invController.addClassification = async (req, res) => {
-  const nav = await utilities.getNav()
   const { classification_name } = req.body
+  const nav = await utilities.getNav()
+
+  // 1. Check if classification already existis
+  const existing = await invModel.checkExistingClassification(classification_name)
+  if (existing) {
+    req.flash("notice", `The classification "${classification_name}" already exists.`)
+    return res.render("inventory/add-classification", {
+      title: "Add Classification",
+      nav,
+      errors: null,
+      classification_name,
+    })
+  }
 
   const result = await invModel.addClassification(classification_name)
 
   if (result) {
     req.flash("notice", "Classification added successfully.")
     const newNav = await utilities.getNav()
+    const classificationSelect = await utilities.buildClassificationList() 
+
     return res.render("inventory/management", {
       title: "Vehicle Management",
       nav: newNav,
+      classificationSelect,
       errors: null,
     })
   }
@@ -141,16 +124,37 @@ invController.addClassification = async (req, res) => {
   })
 }
 
+/* ***************************
+ * Add Inventory Process
+ * ************************** */
 invController.addInventory = async (req, res) => {
   const nav = await utilities.getNav()
+  
+  // 2. SERVER-SIDE VALIDATION 
+  const { inv_miles, inv_price } = req.body
+  if (parseFloat(inv_miles) < 0 || parseFloat(inv_price) < 0) {
+    req.flash("notice", "Mileage and Price must be positive numbers.")
+    const classificationList = await utilities.buildClassificationList(req.body.classification_id)
+    return res.render("inventory/add-inventory", {
+      title: "Add Inventory",
+      nav,
+      classificationList,
+      errors: null,
+      ...req.body,
+    })
+  }
+
   const result = await invModel.addInventory(req.body)
 
   if (result) {
     req.flash("notice", "Inventory item added successfully.")
     const newNav = await utilities.getNav()
+    const classificationSelect = await utilities.buildClassificationList()
+
     return res.render("inventory/management", {
       title: "Vehicle Management",
       nav: newNav,
+      classificationSelect, 
       errors: null,
     })
   }
@@ -167,30 +171,28 @@ invController.addInventory = async (req, res) => {
 }
 
 /* ***************************
- *  Return Inventory by Classification As JSON
+ * Additional handlers (Edit/Update/Delete)
  * ************************** */
-invController.getInventoryJSON = async (req, res, next) => {
-  const classification_id = parseInt(req.params.classification_id)
-  const invData = await invModel.getInventoryByClassificationId(classification_id)
+invController.buildEditInventory = async (req, res, next) => {
+  const invId = parseInt(req.params.invId)
+  const nav = await utilities.getNav()
+  const itemData = await invModel.getInventoryById(invId)
+  if (!itemData) return next({ status: 404, message: "Inventory item not found." })
 
-  const data = invData.rows ?? invData
+  const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
+  const itemName = `${itemData.inv_make} ${itemData.inv_model}`
 
-  if (data && data.length > 0 && data[0].inv_id) {
-    return res.json(data)
-  } else {
-    next(new Error("No data returned"))
-  }
+  res.render("inventory/edit-inventory", {
+    title: `Edit ${itemName}`,
+    nav,
+    classificationSelect,
+    errors: null,
+    ...itemData
+  })
 }
 
-/* ***************************
- *  Process inventory update
- * ************************** */
 invController.updateInventory = async (req, res, next) => {
   const nav = await utilities.getNav()
-
-  // inv_id MUST come from the hidden input in edit-inventory.ejs
-  const inv_id = parseInt(req.body.inv_id)
-
   const result = await invModel.updateInventory(req.body)
 
   if (result) {
@@ -198,10 +200,8 @@ invController.updateInventory = async (req, res, next) => {
     return res.redirect("/inv/")
   }
 
-  // If update failed, rebuild dropdown + re-render edit form with sticky values
   req.flash("notice", "Sorry, the update failed.")
   const classificationSelect = await utilities.buildClassificationList(req.body.classification_id)
-
   return res.render("inventory/edit-inventory", {
     title: `Edit ${req.body.inv_make} ${req.body.inv_model}`,
     nav,
@@ -211,5 +211,43 @@ invController.updateInventory = async (req, res, next) => {
   })
 }
 
-module.exports = invController
+invController.buildDeleteView = async (req, res, next) => {
+  const invId = parseInt(req.params.invId)
+  const nav = await utilities.getNav()
+  const itemData = await invModel.getInventoryById(invId)
+  if (!itemData) return next({ status: 404, message: "Inventory item not found." })
 
+  res.render("inventory/delete-confirm", {
+    title: `Delete ${itemData.inv_make} ${itemData.inv_model}`,
+    nav,
+    errors: null,
+    ...itemData
+  })
+}
+
+invController.deleteInventory = async (req, res, next) => {
+  const inv_id = parseInt(req.body.inv_id)
+  const deleteResult = await invModel.deleteInventory(inv_id)
+
+  if (deleteResult) {
+    req.flash("notice", "Vehicle successfully deleted.")
+    return res.redirect("/inv/")
+  }
+
+  req.flash("notice", "Sorry, the delete failed.")
+  return res.redirect("/inv/")
+}
+
+invController.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id)
+  const invData = await invModel.getInventoryByClassificationId(classification_id)
+  const data = invData.rows ?? invData
+
+  if (data && data.length > 0) {
+    return res.json(data)
+  } else {
+    next(new Error("No data returned"))
+  }
+}
+
+module.exports = invController

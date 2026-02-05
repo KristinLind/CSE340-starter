@@ -40,6 +40,7 @@ validate.checkClassificationData = async (req, res, next) => {
  * *************************** */
 validate.inventoryRules = () => {
   return [
+    body("inv_id").optional().isInt().withMessage("Invalid inventory id."),
     body("classification_id")
       .notEmpty().withMessage("Please choose a classification.")
       .isInt().withMessage("Classification must be a valid ID."),
@@ -104,19 +105,24 @@ validate.checkInventoryData = async (req, res, next) => {
  * Check UPDATE inventory data
  * *************************** */
 validate.checkUpdateData = async (req, res, next) => {
-  const { classification_id, inv_make, inv_model } = req.body
   const errors = validationResult(req)
+
+  const {
+    inv_id,
+    classification_id,
+    inv_make,
+    inv_model,
+  } = req.body
 
   if (!errors.isEmpty()) {
     const nav = await utilities.getNav()
     const classificationSelect = await utilities.buildClassificationList(classification_id)
-
     return res.render("inventory/edit-inventory", {
       title: `Edit ${inv_make} ${inv_model}`,
       nav,
       classificationSelect,
       errors: errors.array(),
-      ...req.body,
+      ...req.body, 
     })
   }
   next()

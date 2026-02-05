@@ -30,6 +30,30 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 )
 
+// Deliver account update view
+router.get("/update/:account_id", 
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildUpdateAccount)
+)
+
+// Process account information update
+router.post(
+  "/update",
+  utilities.checkLogin,
+  accountValidate.validateAccountUpdate(),
+  accountValidate.checkUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+)
+
+// Process password change
+router.post(
+  "/update-password",
+  utilities.checkLogin,
+  accountValidate.validatePasswordChange(),
+  accountValidate.checkPasswordData,
+  utilities.handleErrors(accountController.updatePassword)
+)
+
 // Process login (with server-side validation)
 router.post(
   "/login",

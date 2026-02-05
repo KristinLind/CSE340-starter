@@ -93,6 +93,11 @@ app.get("/test-error", (req, res) => {
   res.redirect("/")
 })
 
+app.use((req, res, next) => {
+  res.locals.messages = req.flash()
+  next()
+})
+
 app.get("/test-info", (req, res) => {
   req.flash("info", "Info banner is working!")
   res.redirect("/")

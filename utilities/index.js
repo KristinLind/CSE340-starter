@@ -133,6 +133,26 @@ Util.checkJWTToken = (req, res, next) => {
 * General Error Handling
 *****************************/
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+/* ***************************
+ * Middleware to check account type for authorization
+ * Only allows Employee or Admin account types
+ * Redirects to login with error message if unauthorized
+ *****************************/
+Util.checkAccountType = (req, res, next) => {
+  // Check if user is logged in and has accountData
+  if (res.locals.loggedin && res.locals.accountData) {
+    const accountType = res.locals.accountData.account_type
+    
+    // Allow Employee or Admin
+    if (accountType === "Employee" || accountType === "Admin") {
+      return next()
+    }
+  }
+  
+  // If not authorized, flash message and redirect to login
+  req.flash("notice", "You must be an employee or administrator to access this area.")
+  return res.redirect("/account/login")
+}
 
 module.exports = Util
 

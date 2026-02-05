@@ -1,33 +1,30 @@
 'use strict'
 
-// Get a list of items in inventory based on the classification_id
-let classificationList = document.querySelector("#classificationList")
+const classificationList =
+  document.querySelector("#classificationList") ||
+  document.querySelector("#classification_id")
 
-classificationList.addEventListener("change", function () {
-  let classification_id = classificationList.value
-  console.log(`classification_id is: ${classification_id}`)
+if (!classificationList) {
+  console.log("No classification dropdown found. Check the select id.")
+} else {
+  classificationList.addEventListener("change", function () {
+    const classification_id = classificationList.value
+    const classIdURL = "/inv/getInventory/" + classification_id
 
-  let classIdURL = "/inv/getInventory/" + classification_id
-
-  fetch(classIdURL)
-    .then(function (response) {
-      if (response.ok) {
-        return response.json()
-      }
-      throw Error("Network response was not OK")
-    })
-    .then(function (data) {
-      console.log(data)
-      buildInventoryList(data)
-    })
-    .catch(function (error) {
-      console.log('There was a problem: ', error.message)
-    })
-})
+    fetch(classIdURL)
+      .then((response) => {
+        if (response.ok) return response.json()
+        throw Error("Network response was not OK")
+      })
+      .then((data) => buildInventoryList(data))
+      .catch((error) => console.log("There was a problem: ", error.message))
+  })
+}
 
 // Build inventory items into HTML table components and inject into DOM
 function buildInventoryList(data) {
   let inventoryDisplay = document.getElementById("inventoryDisplay")
+  if (!inventoryDisplay) return
 
   // Set up the table labels
   let dataTable = '<thead>'

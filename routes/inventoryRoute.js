@@ -11,18 +11,21 @@ router.get("/detail/:invId", utilities.handleErrors(invController.buildByInvento
 // PROTECTED ROUTES - Employee/Admin only
 router.get(
   "/",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.buildManagement)
 )
 
 router.get(
   "/add-classification",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.buildAddClassification)
 )
 
 router.post(
   "/add-classification",
+  utilities.checkLogin,
   utilities.checkAccountType,
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
@@ -31,24 +34,28 @@ router.post(
 
 router.get(
   "/add-inventory",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.buildAddInventory)
 )
 
 router.get(
   "/getInventory/:classification_id",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.getInventoryJSON)
 )
 
 router.get(
   "/edit/:invId",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.buildEditInventory)
 )
 
 router.post(
   "/update",
+  utilities.checkLogin,
   utilities.checkAccountType,
   invValidate.inventoryRules(),
   invValidate.checkUpdateData,
@@ -57,6 +64,7 @@ router.post(
 
 router.post(
   "/add-inventory",
+  utilities.checkLogin,
   utilities.checkAccountType,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
@@ -66,6 +74,7 @@ router.post(
 // Deliver delete confirmation view
 router.get(
   "/delete/:invId",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.buildDeleteView)
 )
@@ -73,6 +82,7 @@ router.get(
 // Process the delete
 router.post(
   "/delete",
+  utilities.checkLogin,
   utilities.checkAccountType,
   utilities.handleErrors(invController.deleteInventory)
 )

@@ -14,14 +14,6 @@ router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.b
 // Deliver registration view
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
-router.get("/logout", utilities.handleErrors(async (req, res) => {
-    res.clearCookie("jwt")
-    req.flash("notice", "You have been logged out.")
-    req.session.destroy(() => {
-    res.redirect("/account/login")
-  })
-}))
-
 // Process registration (with server-side validation)
 router.post(
   "/register",
@@ -61,6 +53,9 @@ router.post(
   accountValidate.checkLoginData,
   utilities.handleErrors(accountController.accountLogin)
 )
+
+// Process logout
+router.get("/logout", utilities.handleErrors(accountController.logout))
 
 module.exports = router
 

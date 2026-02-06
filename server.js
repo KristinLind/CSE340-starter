@@ -5,16 +5,16 @@ const express = require("express")
 require("dotenv").config()
 const expressLayouts = require("express-ejs-layouts")
 const app = express()
-
+const flash = require("connect-flash")
 const staticRoute = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const utilities = require("./utilities")
 const invRoute = require("./routes/inventoryRoute")
 const errorRoute = require("./routes/errorRoute")
-const session = require("express-session")
-const pool = require("./database/")
 const accountRoute = require("./routes/accountRoute")
 const cookieParser = require("cookie-parser")
+const session = require("express-session")
+
 /* ***********************
  * View Engine and Templates
  *************************/
@@ -26,33 +26,25 @@ app.set("layout", "./layouts/layout")
  * Middleware 
  *************************/
 app.use(express.static("public"))
-
+app.use(cookieParser())
 app.use(session({
-  store: new (require("connect-pg-simple")(session))({
-    createTableIfMissing: true,
-    pool,
-  }),
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
-  name: "sessionId",
+  saveUninitialized: false,
 }))
+app.use(flash())
+app.use(utilities.checkJWTToken)
 
-// Express Messages Middleware
-app.use(require("connect-flash")())
 app.use((req, res, next) => {
   res.locals.flash = {
     success: req.flash("success"),
     error: req.flash("error"),
     info: req.flash("info"),
-    notice: req.flash("notice")
+    notice: req.flash("notice"),
   }
   next()
 })
-app.use(function (req, res, next) {
-  res.locals.messages = require("express-messages")(req, res)
-  next()
-})
+
 
 // Build nav for every view
 app.use(async (req, res, next) => {
@@ -66,10 +58,6 @@ app.use(async (req, res, next) => {
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json()) // 
-
-app.use(cookieParser())
-app.use(utilities.checkJWTToken)
-
 
 /* ***********************
  * Routes
@@ -91,11 +79,6 @@ app.get("/test-success", (req, res) => {
 app.get("/test-error", (req, res) => {
   req.flash("error", "Error banner is working!")
   res.redirect("/")
-})
-
-app.use((req, res, next) => {
-  res.locals.messages = req.flash()
-  next()
 })
 
 app.get("/test-info", (req, res) => {

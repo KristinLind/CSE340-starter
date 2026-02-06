@@ -50,13 +50,18 @@ async function buildUpdateAccount(req, res) {
   const nav = await utilities.getNav()
   const account_id = parseInt(req.params.account_id)
 
+  if (!res.locals.accountData) {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+
   if (res.locals.accountData.account_id !== account_id) {
     req.flash("notice", "Access denied.")
     return res.redirect("/account/")
   }
-  
+
   const accountData = await accountModel.getAccountById(account_id)
-  
+
   res.render("account/update", {
     title: "Update Account",
     nav,
@@ -144,9 +149,9 @@ async function updatePassword(req, res) {
  *  Process Registration
  * *************************************** */
 async function registerAccount(req, res) {
-  const nav = await utilities.getNav()
-  const { account_firstname, account_lastname, account_email, account_password } = req.body
+  const nav = await utilities.getNav() 
 
+  const { account_firstname, account_lastname, account_email, account_password } = req.body
   const hashedPassword = await bcrypt.hash(account_password, 10)
 
   const regResult = await accountModel.registerAccount(
@@ -156,15 +161,16 @@ async function registerAccount(req, res) {
     hashedPassword
   )
 
-  if (regResult) {
-    req.flash("success", `Congratulations, you're registered ${account_firstname}. Please log in.`)
-    return res.status(201).render("account/login", {
-      title: "Login",
-      nav,
-      errors: null,
-      account_email,
-    })
-  }
+if (regResult) {
+  req.flash("success", `Congratulations, you're registered ${account_firstname}. Please log in.`)
+  return res.status(201).render("account/login", {
+    title: "Login",
+    nav, 
+    errors: null,
+    account_email,
+  })
+}
+
 
   req.flash("error", "Sorry, the registration failed.")
   return res.status(501).render("account/register", {
@@ -236,6 +242,15 @@ async function accountLogin(req, res) {
 }
 }
 
+/* ****************************************
+ *  Logout account
+ * *************************************** */
+async function logout(req, res) {
+  res.clearCookie("jwt")
+  req.flash("success", "You have been logged out.")
+  return res.redirect("/account/login")
+}
+
 module.exports = { 
   buildLogin, 
   buildRegister, 
@@ -245,5 +260,6 @@ module.exports = {
   buildUpdateAccount,
   updateAccount,
   updatePassword,
+  logout
 }
 

@@ -4,6 +4,23 @@
     </h1>
 </section>
 
-<%- messages() %>
+<% if (flash && flash.notice.length) { %>
+    <div class="notice">
+        <%= flash.notice[0] %>
+    </div>
+    <% } %>
+
+        <% if (flash && flash.success.length) { %>
+            <div class="flash flash--success">
+                <%= flash.success[0] %>
+            </div>
+            <% } %>
+
+                <% if (flash && flash.error.length) { %>
+                    <div class="flash flash--error">
+                        <%= flash.error[0] %>
+                    </div>
+                    <% } %>
+
 
     <%- grid %>

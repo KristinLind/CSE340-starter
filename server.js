@@ -68,6 +68,10 @@ app.use("/account", accountRoute)
 app.get("/", utilities.handleErrors(baseController.buildHome))
 app.use("/inv", invRoute)
 
+const reviewRoute = require("./routes/reviewRoute")
+
+app.use("/reviews", reviewRoute)
+
 // Task 3 intentional error route
 app.use(errorRoute)
 

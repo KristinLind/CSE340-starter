@@ -32,6 +32,17 @@ ALTER TABLE IF EXISTS public.inventory
 	ON UPDATE CASCADE
 	ON DELETE NO ACTION;
 
+  -- Create vehicle review table --
+  CREATE TABLE vehicle_reviews (
+  review_id SERIAL PRIMARY KEY,
+  inv_id INT REFERENCES inventory(inv_id),
+  account_id INT REFERENCES account(account_id),
+  rating INT CHECK (rating BETWEEN 1 AND 5),
+  review_text TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- Table structure for table `account`
 CREATE TABLE IF NOT EXISTS public.account
 (

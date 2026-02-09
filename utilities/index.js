@@ -86,6 +86,31 @@ Util.buildVehicleDetail = function (vehicle) {
   `
 }
 
+Util.buildReviewSection = function (reviews) {
+  let html = `<section class="review-section">
+    <h2>Vehicle Reviews</h2>`
+
+  if (!reviews || reviews.length === 0) {
+    html += `<p>No reviews yet. Be the first to review this vehicle!</p>`
+  } else {
+    html += `<ul class="review-list">`
+    reviews.forEach(review => {
+      html += `
+        <li class="review-item">
+          <strong>${review.account_firstname} ${review.account_lastname}</strong>
+          <span>Rating: ${review.rating}/5</span>
+          <p>${review.review_text}</p>
+          <small>${new Date(review.created_at).toLocaleDateString()}</small>
+        </li>`
+    })
+    html += `</ul>`
+  }
+
+  html += `</section>`
+  return html
+}
+
+
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications()
   let classificationList =

@@ -1,6 +1,7 @@
 // controllers/invController.js
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const reviewModel = require("../models/review-model")
 
 const invController = {}
 
@@ -25,8 +26,12 @@ invController.buildByInventoryId = async function (req, res, next) {
 
   if (!vehicle) return next({ status: 404, message: "Vehicle not found." })
 
+  const reviewsData = await reviewModel.getReviewsByInvId(invId)
+  const reviewHtml = utilities.buildReviewSection(reviewsData.rows)
+
   const title = `${vehicle.inv_make} ${vehicle.inv_model}`
-  const detailHtml = utilities.buildVehicleDetail(vehicle)
+  const detailHtml =
+    utilities.buildVehicleDetail(vehicle) + reviewHtml
 
   res.render("inventory/detail", {
     title,

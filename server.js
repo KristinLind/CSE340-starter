@@ -15,12 +15,6 @@ const accountRoute = require("./routes/accountRoute")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
 
-/* ***********************
- * View Engine and Templates
- *************************/
-app.set("view engine", "ejs")
-app.use(expressLayouts)
-app.set("layout", "./layouts/layout")
 
 /* **********************
  * Middleware 
@@ -45,6 +39,12 @@ app.use((req, res, next) => {
   next()
 })
 
+/* ***********************
+ * View Engine and Templates
+ *************************/
+app.set("view engine", "ejs")
+app.use(expressLayouts)
+app.set("layout", "./layouts/layout")
 
 // Build nav for every view
 app.use(async (req, res, next) => {

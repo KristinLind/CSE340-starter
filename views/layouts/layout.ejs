@@ -19,9 +19,23 @@
                 <div class="siteName">
                     <a href="/" title="Home page">CSE Motors</a>
                 </div>
-                <div class="account">
-                    <a href="/account" title="My account">My Account</a>
-                </div>
+    <div class="account">
+        <% if (loggedin && accountData) { %>
+    <div class="account-links">
+        <span class="welcome">
+            Welcome <strong>
+            <%= accountData.account_firstname %></strong>
+        </span>
+
+        <span class="divider">|</span>
+        <a href="/account/logout" class="logout-link">Logout</a>
+    </div>
+
+        <% } else { %>
+                <a href="/account/login" title="My account">My Account</a>
+        <% } %>
+    </div>
+
             </div>
         </header>
 

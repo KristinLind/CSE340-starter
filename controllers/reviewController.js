@@ -1,24 +1,50 @@
 const reviewModel = require("../models/review-model")
 const utilities = require("../utilities")
 
+const reviewController = {}
+
 /* ***************************
- * Process new review
+ * Build Add Review View
  * ************************** */
-async function addReview(req, res) {
-  const { inv_id, rating, review_text } = req.body
-  const account_id = res.locals.accountData.account_id
+reviewController.buildAddReview = async (req, res, next) => {
+  try {
+    const invId = parseInt(req.params.invId)
+    const nav = await utilities.getNav()
 
-  await reviewModel.addReview(
-    inv_id,
-    account_id,
-    rating,
-    review_text
-  )
+    if (!res.locals.loggedin) {
+      req.flash("notice", "Please log in to leave a review.")
+      return res.redirect("/account/login")
+    }
 
-  req.flash("success", "Review submitted successfully.")
-  res.redirect(`/inv/detail/${inv_id}`)
+    res.render("reviews/add-review", {
+      title: "Leave a Review",
+      nav,
+      invId,
+      errors: null,
+    })
+  } catch (err) {
+    next(err)
+  }
 }
 
-module.exports = {
-  addReview,
+/* ***************************
+ * Process Review Submission
+ * ************************** */
+reviewController.addReview = async (req, res, next) => {
+  try {
+    const inv_id = parseInt(req.body.inv_id)
+    const rating = parseInt(req.body.rating)
+    const review_text = req.body.review_text
+    const account_id = res.locals.accountData.account_id
+
+    await reviewModel.addReview(inv_id, account_id, rating, review_text)
+
+    req.flash("notice", "Review submitted successfully.")
+    res.redirect(`/inv/detail/${inv_id}`)
+  } catch (err) {
+    next(err)
+  }
 }
+
+module.exports = reviewController
+

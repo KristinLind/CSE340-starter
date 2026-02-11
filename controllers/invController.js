@@ -20,24 +20,37 @@ invController.buildByClassificationId = async function (req, res, next) {
 }
 
 invController.buildByInventoryId = async function (req, res, next) {
-  const invId = req.params.invId
-  const nav = await utilities.getNav()
-  const vehicle = await invModel.getInventoryById(invId)
+  try {
+    const invId = req.params.invId
+    const nav = await utilities.getNav()
 
-  if (!vehicle) return next({ status: 404, message: "Vehicle not found." })
+    const vehicle = await invModel.getInventoryById(invId)
+    if (!vehicle) {
+      return next({ status: 404, message: "Vehicle not found." })
+    }
 
-  const reviewsData = await reviewModel.getReviewsByInvId(invId)
-  const reviewHtml = utilities.buildReviewSection(reviewsData.rows)
+    // IMPORTANT: this is already an array
+    const reviews = await reviewModel.getReviewsByInvId(invId)
 
-  const title = `${vehicle.inv_make} ${vehicle.inv_model}`
-  const detailHtml =
-    utilities.buildVehicleDetail(vehicle) + reviewHtml
+    const reviewHtml = utilities.buildReviewSection(
+      reviews,
+      invId,
+      res.locals.loggedin,
+      res.locals.accountData?.account_id
+    )
 
-  res.render("inventory/detail", {
-    title,
-    nav,
-    detailHtml,
-  })
+    const detailHtml =
+      utilities.buildVehicleDetail(vehicle) +
+      reviewHtml
+
+    res.render("inventory/detail", {
+      title: `${vehicle.inv_make} ${vehicle.inv_model}`,
+      nav,
+      detailHtml,
+    })
+  } catch (err) {
+    next(err)
+  }
 }
 
 invController.buildManagement = async (req, res) => {

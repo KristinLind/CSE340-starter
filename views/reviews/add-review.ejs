@@ -1,0 +1,29 @@
+<section class="review-page">
+    <h1>Leave a Review</h1>
+
+    <form action="/reviews/add" method="post" class="review-form">
+        <input type="hidden" name="inv_id" value="<%= invId %>">
+
+        <div class="form-group">
+            <label for="rating">Rating</label>
+            <select name="rating" id="rating" required>
+                <option value="">Choose…</option>
+                <option value="5">★★★★★</option>
+                <option value="4">★★★★</option>
+                <option value="3">★★★</option>
+                <option value="2">★★</option>
+                <option value="1">★</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="review_text">Your Review</label>
+            <textarea name="review_text" id="review_text" rows="5"
+                placeholder="Share your experience with this vehicle…" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-review-submit">
+            Submit Review
+        </button>
+    </form>
+</section>

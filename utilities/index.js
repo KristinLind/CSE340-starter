@@ -86,30 +86,82 @@ Util.buildVehicleDetail = function (vehicle) {
   `
 }
 
-Util.buildReviewSection = function (reviews) {
-  let html = `<section class="review-section">
-    <h2>Vehicle Reviews</h2>`
+Util.buildReviewSection = function (
+  reviews = [],
+  invId,
+  loggedIn = false,
+  currentAccountId = null
+) {
+  const average =
+    reviews.length === 0
+      ? 0
+      : Math.round(
+          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        )
 
-  if (!reviews || reviews.length === 0) {
+  const stars = "★★★★★☆☆☆☆☆".slice(5 - average, 10 - average)
+
+  let html = `
+    <section class="review-section">
+      <h2>Vehicle Reviews</h2>
+
+      <div class="review-summary">
+        <span class="stars">${stars}</span>
+        <span class="count">
+          (${reviews.length} review${reviews.length !== 1 ? "s" : ""})
+        </span>
+      </div>
+  `
+
+  if (loggedIn) {
+    html += `
+      <div class="review-cta">
+        <a href="/reviews/add/${invId}" class="btn-review">
+          Leave a Review
+        </a>
+      </div>
+    `
+  } else {
+    html += `<p class="login-note">Log in to leave a review.</p>`
+  }
+
+  if (reviews.length === 0) {
     html += `<p>No reviews yet. Be the first to review this vehicle!</p>`
   } else {
     html += `<ul class="review-list">`
-    reviews.forEach(review => {
+
+    reviews.forEach((review) => {
+      const isOwner =
+        loggedIn &&
+        currentAccountId !== null &&
+        review.account_id === currentAccountId
+
       html += `
         <li class="review-item">
-          <strong>${review.account_firstname} ${review.account_lastname}</strong>
-          <span>Rating: ${review.rating}/5</span>
+          <strong>${review.account_firstname}</strong>
+          <span class="rating">Rating: ${review.rating}/5</span>
           <p>${review.review_text}</p>
           <small>${new Date(review.created_at).toLocaleDateString()}</small>
-        </li>`
+      `
+
+      if (isOwner) {
+        html += `
+          <div class="review-actions">
+            <a href="/reviews/edit/${review.review_id}" class="btn-edit">Edit</a>
+            <a href="/reviews/delete/${review.review_id}" class="btn-delete">Delete</a>
+          </div>
+        `
+      }
+
+      html += `</li>`
     })
+
     html += `</ul>`
   }
 
   html += `</section>`
   return html
 }
-
 
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications()
@@ -136,20 +188,66 @@ Util.checkLogin = (req, res, next) => {
 }
 
 Util.checkJWTToken = (req, res, next) => {
+  res.locals.loggedin = false   // 
+
   if (req.cookies && req.cookies.jwt) {
-    jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, (err, accountData) => {
-      if (err) {
-        req.flash("notice", "Please log in.")
-        res.clearCookie("jwt")
-        return res.redirect("/account/login")
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      (err, accountData) => {
+        if (err) {
+          res.clearCookie("jwt")
+          return next()
+        }
+
+        res.locals.accountData = accountData
+        res.locals.loggedin = true
+        return next()
       }
-      res.locals.accountData = accountData
-      res.locals.loggedin = true
-      return next()
-    })
+    )
   } else {
     return next()
   }
+}
+
+Util.buildReviewForm = function (inv_id, loggedin) {
+  if (!loggedin) {
+    return `
+      <p class="notice">
+        <a href="/account/login">Log in</a> to leave a review.
+      </p>
+    `
+  }
+
+  return `
+    <section class="review-form">
+      <h3>Leave a Review</h3>
+
+      <form action="/reviews/add" method="post">
+        <input type="hidden" name="inv_id" value="${inv_id}">
+
+        <label for="rating">Rating</label>
+        <select name="rating" id="rating" required>
+          <option value="">Choose…</option>
+          <option value="5">★★★★★</option>
+          <option value="4">★★★★</option>
+          <option value="3">★★★</option>
+          <option value="2">★★</option>
+          <option value="1">★</option>
+        </select>
+
+        <label for="review_text">Review</label>
+        <textarea
+          name="review_text"
+          id="review_text"
+          rows="4"
+          required
+        ></textarea>
+
+        <button type="submit" class="btn">Submit Review</button>
+      </form>
+    </section>
+  `
 }
 
 /* ***************************

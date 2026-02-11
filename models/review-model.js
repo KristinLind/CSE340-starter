@@ -31,6 +31,8 @@ async function getReviewsByInvId(inv_id) {
   try {
     const sql = `
       SELECT r.review_id,
+             r.inv_id,
+             r.account_id,
              r.rating,
              r.review_text,
              r.created_at,

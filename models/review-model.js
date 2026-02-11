@@ -51,7 +51,35 @@ async function getReviewsByInvId(inv_id) {
   }
 }
 
+/* ***************************
+ * Get review by ID
+ * ************************** */
+async function getReviewById(review_id) {
+  const sql = `
+    SELECT *
+    FROM vehicle_reviews
+    WHERE review_id = $1
+  `
+  const result = await pool.query(sql, [review_id])
+  return result.rows[0]
+}
+
+/* ***************************
+ * Delete review by ID
+ * ************************** */
+async function deleteReview(review_id) {
+  const sql = `
+    DELETE FROM vehicle_reviews
+    WHERE review_id = $1
+    RETURNING *
+  `
+  const result = await pool.query(sql, [review_id])
+  return result.rowCount
+}
+
 module.exports = {
   addReview,
   getReviewsByInvId,
+  getReviewById,
+  deleteReview
 }

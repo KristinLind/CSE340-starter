@@ -15,4 +15,10 @@ router.post(
   utilities.handleErrors(reviewController.addReview)
 )
 
+// Handle delete review
+router.get(
+  "/delete/:reviewId",
+  utilities.handleErrors(reviewController.deleteReview)
+)
+
 module.exports = router

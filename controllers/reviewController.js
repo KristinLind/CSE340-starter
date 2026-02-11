@@ -46,5 +46,44 @@ reviewController.addReview = async (req, res, next) => {
   }
 }
 
+/* ***************************
+ * Delete Review
+ * ************************** */
+reviewController.deleteReview = async (req, res, next) => {
+  try {
+    const review_id = parseInt(req.params.reviewId)
+
+    const review = await reviewModel.getReviewById(review_id)
+
+    if (!review) {
+      req.flash("error", "Review not found.")
+      return res.redirect("/")
+    }
+
+    // Allow delete only if:
+    // 1. Logged in user owns review
+    // OR
+    // 2. User is manager/admin
+    const account_id = res.locals.accountData.account_id
+    const account_type = res.locals.accountData.account_type
+
+    if (
+      review.account_id !== account_id &&
+      account_type !== "Manager"
+    ) {
+      req.flash("error", "Unauthorized action.")
+      return res.redirect("/")
+    }
+
+    await reviewModel.deleteReview(review_id)
+
+    req.flash("success", "Review deleted successfully.")
+    res.redirect(`/inv/detail/${review.inv_id}`)
+
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = reviewController
 

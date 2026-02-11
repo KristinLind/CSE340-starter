@@ -121,6 +121,8 @@ footer {
   background: var(--black);
   color: white;
   padding: 0.75rem 1rem;
+  border-top: 4px solid var(--champagne);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
   font-size: 0.9rem;
 }
 
@@ -1417,7 +1419,6 @@ body.inv-management main {
 
 .auth-form-card {
   text-align: left;
-  /* keeps labels aligned properly */
 }
 
 .auth-footer-card {
@@ -1588,12 +1589,6 @@ body.inv-management main {
   .container {
     background-image: none !important;
     background: var(--black) !important;
-  }
-}
-
-@media (max-width: 600px) {
-  body {
-    background-color: var(--navy);
   }
 }
 

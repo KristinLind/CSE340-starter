@@ -1591,6 +1591,12 @@ body.inv-management main {
   }
 }
 
+@media (max-width: 600px) {
+  body {
+    background-color: var(--navy);
+  }
+}
+
 @media (max-width: 768px) {
   body.register {
     background: var(--blue-green) !important;

@@ -1,0 +1,27 @@
+<section class="review-page">
+    <h1>Edit Review</h1>
+
+    <form action="/reviews/edit" method="post" class="review-form">
+        <input type="hidden" name="review_id" value="<%= review.review_id %>">
+
+        <div class="form-group">
+            <label for="rating">Rating</label>
+            <select name="rating" id="rating" required>
+                <option value="5" <%=review.rating==5 ? "selected" : "" %>>★★★★★</option>
+                <option value="4" <%=review.rating==4 ? "selected" : "" %>>★★★★</option>
+                <option value="3" <%=review.rating==3 ? "selected" : "" %>>★★★</option>
+                <option value="2" <%=review.rating==2 ? "selected" : "" %>>★★</option>
+                <option value="1" <%=review.rating==1 ? "selected" : "" %>>★</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="review_text">Your Review</label>
+            <textarea name="review_text" rows="5" required><%= review.review_text %></textarea>
+        </div>
+
+        <button type="submit" class="btn-review-submit">
+            Update Review
+        </button>
+    </form>
+</section>

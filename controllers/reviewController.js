@@ -51,34 +51,88 @@ reviewController.addReview = async (req, res, next) => {
  * ************************** */
 reviewController.deleteReview = async (req, res, next) => {
   try {
-    const review_id = parseInt(req.params.reviewId)
+    const reviewId = parseInt(req.params.reviewId)
 
-    const review = await reviewModel.getReviewById(review_id)
+    const review = await reviewModel.getReviewById(reviewId)
 
     if (!review) {
       req.flash("error", "Review not found.")
       return res.redirect("/")
     }
 
+    console.log("Logged in account type:", account_type)
+    
     // Allow delete only if:
     // 1. Logged in user owns review
-    // OR
-    // 2. User is manager/admin
     const account_id = res.locals.accountData.account_id
     const account_type = res.locals.accountData.account_type
 
     if (
       review.account_id !== account_id &&
-      account_type !== "Manager"
+      account_type !== "Admin"
     ) {
       req.flash("error", "Unauthorized action.")
       return res.redirect("/")
     }
 
-    await reviewModel.deleteReview(review_id)
+    await reviewModel.deleteReview(reviewId)
 
     req.flash("success", "Review deleted successfully.")
     res.redirect(`/inv/detail/${review.inv_id}`)
+
+  } catch (err) {
+    next(err)
+  }
+}
+
+/* ***************************
+ * Edit Review
+ * ************************** */
+
+reviewController.buildEditReview = async (req, res, next) => {
+  try {
+    const reviewId = parseInt(req.params.reviewId)
+
+    const review = await reviewModel.getReviewById(reviewId)
+
+    if (!review) {
+      req.flash("error", "Review not found.")
+      return res.redirect("/")
+    }
+
+    res.render("reviews/edit-review", {
+      title: "Edit Review",
+      review,
+      errors: null,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+/* ***************************
+ * Process Update Review
+ * ************************** */
+
+reviewController.updateReview = async (req, res, next) => {
+  try {
+    const reviewId = parseInt(req.body.review_id)
+    const rating = parseInt(req.body.rating)
+    const review_text = req.body.review_text
+
+    const updated = await reviewModel.updateReview(
+      reviewId,
+      rating,
+      review_text
+    )
+
+    if (!updated) {
+      req.flash("error", "Update failed.")
+      return res.redirect("/")
+    }
+
+    req.flash("success", "Review updated successfully.")
+    res.redirect(`/inv/detail/${updated.inv_id}`)
 
   } catch (err) {
     next(err)

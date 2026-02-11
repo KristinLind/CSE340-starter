@@ -90,7 +90,8 @@ Util.buildReviewSection = function (
   reviews = [],
   invId,
   loggedIn = false,
-  currentAccountId = null
+  currentAccountId = null,
+  accountType = null
 ) {
   const average =
     reviews.length === 0
@@ -131,10 +132,13 @@ Util.buildReviewSection = function (
     html += `<ul class="review-list">`
 
     reviews.forEach((review) => {
+
       const isOwner =
         loggedIn &&
-        currentAccountId !== null &&
-        review.account_id === currentAccountId
+        (
+          review.account_id === currentAccountId ||
+          accountType === "Admin"
+        )
 
       html += `
         <li class="review-item">

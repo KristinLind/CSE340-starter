@@ -77,9 +77,29 @@ async function deleteReview(review_id) {
   return result.rowCount
 }
 
+/* ***************************
+ * Update review
+ * ************************** */
+async function updateReview(review_id, rating, review_text) {
+  const sql = `
+    UPDATE vehicle_reviews
+    SET rating = $1,
+        review_text = $2
+    WHERE review_id = $3
+    RETURNING *
+  `
+  const result = await pool.query(sql, [
+    rating,
+    review_text,
+    review_id
+  ])
+  return result.rows[0]
+}
+
 module.exports = {
   addReview,
   getReviewsByInvId,
   getReviewById,
-  deleteReview
+  deleteReview,
+  updateReview
 }

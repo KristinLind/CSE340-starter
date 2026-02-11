@@ -21,4 +21,17 @@ router.get(
   utilities.handleErrors(reviewController.deleteReview)
 )
 
+// Build edit review form
+router.get(
+  "/edit/:reviewId",
+  utilities.handleErrors(reviewController.buildEditReview)
+)
+
+// Process edit submission
+router.post(
+  "/edit",
+  utilities.handleErrors(reviewController.updateReview)
+)
+
+
 module.exports = router

@@ -36,7 +36,8 @@ invController.buildByInventoryId = async function (req, res, next) {
       reviews,
       invId,
       res.locals.loggedin,
-      res.locals.accountData?.account_id
+      res.locals.accountData?.account_id,
+      res.locals.accountData?.account_type
     )
 
     const detailHtml =

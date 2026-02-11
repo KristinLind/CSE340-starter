@@ -60,10 +60,11 @@ reviewController.deleteReview = async (req, res, next) => {
       return res.redirect("/")
     }
 
-    console.log("Logged in account type:", account_type)
-    
-    // Allow delete only if:
-    // 1. Logged in user owns review
+    if (!res.locals.accountData) {
+      req.flash("error", "You must be logged in.")
+      return res.redirect("/account/login")
+    }
+
     const account_id = res.locals.accountData.account_id
     const account_type = res.locals.accountData.account_type
 
